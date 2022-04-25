@@ -11,6 +11,6 @@ public class ImportConstant {
     /**
      * 每次入库最大数据量
      */
-    public static final Integer MAX_INSERT_COUNT = 1000;
+    public static final Integer MAX_INSERT_COUNT = 3000;
 
 }

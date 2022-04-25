@@ -35,7 +35,7 @@ import java.util.*;
 
 /**
  * @Author it-learning
- * @Description excel工具包
+ * @Description excel导出工具包
  * @Date 2022/2/25 18:05
  * @Version 1.0
  */
@@ -53,7 +53,7 @@ public class ExcelExportUtil<T> {
      * @param exportData 需要导出数据
      * @param sheetNames sheet页的名称，为空则默认以:sheet + 数字规则命名
      */
-    public void exportFile(String fileName, List<T> head, List<List<T>> exportData, List<String> sheetNames, HttpServletResponse response) {
+    public static <T> void exportFile(String fileName, List<T> head, List<List<T>> exportData, List<String> sheetNames, HttpServletResponse response) {
         if (Objects.isNull(response) || StrUtil.isBlank(fileName) || CollUtil.isEmpty(head)) {
             log.info("ExcelExportUtil exportFile required param can't be empty");
             return;
@@ -64,7 +64,7 @@ public class ExcelExportUtil<T> {
             response.setCharacterEncoding(ExportConstant.UTF_8);
             response.setHeader(ExportConstant.CONTENT_DISPOSITION, ExportConstant.ATTACHMENT_FILENAME + fileName + ExportConstant.XLSX_SUFFIX);
             // 设置导出的表格样式
-            HorizontalCellStyleStrategy horizontalCellStyleStrategy = this.getExportDefaultStyle();
+            HorizontalCellStyleStrategy horizontalCellStyleStrategy = getExportDefaultStyle();
             writer = EasyExcel.write(response.getOutputStream()).registerWriteHandler(horizontalCellStyleStrategy).build();
             for (int itemIndex = 0; itemIndex < exportData.size(); itemIndex++) {
                 // 表头数据
@@ -93,7 +93,7 @@ public class ExcelExportUtil<T> {
      * @param sheetNames sheet页名称
      * @param response   响应流
      */
-    public void exportWithDynamicData(String fileName, List<List<List<String>>> head, List<List<List<T>>> exportData, List<String> sheetNames, HttpServletResponse response) throws IOException {
+    public static <T> void exportWithDynamicData(String fileName, List<List<List<String>>> head, List<List<List<T>>> exportData, List<String> sheetNames, HttpServletResponse response) throws IOException {
         ExcelWriter writer = null;
         try {
             response.setContentType(ExportConstant.EXCEL_CONTENT_TYPE);
@@ -121,7 +121,7 @@ public class ExcelExportUtil<T> {
      *
      * @return
      */
-    private HorizontalCellStyleStrategy getExportDefaultStyle() {
+    private static HorizontalCellStyleStrategy getExportDefaultStyle() {
         WriteCellStyle headWriteCellStyle = new WriteCellStyle();
         //设置头字体
         WriteFont headWriteFont = new WriteFont();
