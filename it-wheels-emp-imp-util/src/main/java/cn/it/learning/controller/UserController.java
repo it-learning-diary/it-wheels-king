@@ -22,19 +22,32 @@ public class UserController {
     private UserServiceImpl userService;
 
     /**
-     * 导出案例
+     * 导入案例
      *
      * @param file
      * @throws Exception
      */
     @PostMapping("/user/upload")
-    public void uploadUserList(@RequestBody MultipartFile file) throws Exception {
-        userService.uploadUserList(file);
+    public void uploadUserList(@RequestBody MultipartFile file,String username) throws Exception {
+        userService.uploadUserListDemo(file,username);
     }
 
-
-    @PostMapping("/user/download")
-    public void downloadUserList(HttpServletResponse response) {
-        userService.downloadUserList(response);
+    /**
+     * 导出案例
+     * @param response
+     */
+    @PostMapping("/user/export")
+    public void exportUserList(HttpServletResponse response) {
+        userService.exportUserListDemo(response);
     }
+
+    /**
+     * 导出案例
+     * @param response
+     */
+    @PostMapping("/user/download/template")
+    public void downloadUserTemplate(HttpServletResponse response,String filePath,String saveFileName) {
+        userService.downloadTemplateDemo(filePath, saveFileName, response);
+    }
+
 }
