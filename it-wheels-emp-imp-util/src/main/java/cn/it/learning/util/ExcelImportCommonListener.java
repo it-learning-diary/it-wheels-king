@@ -4,7 +4,9 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.it.learning.constant.ImportConstant;
+import cn.it.learning.refactor.ThrowingConsumer;
 import com.alibaba.excel.context.AnalysisContext;
+import com.alibaba.excel.enums.CellDataTypeEnum;
 import com.alibaba.excel.exception.ExcelDataConvertException;
 import com.alibaba.excel.metadata.data.ReadCellData;
 import com.alibaba.excel.read.listener.ReadListener;
@@ -12,8 +14,11 @@ import com.alibaba.excel.util.ConverterUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.utils.Lists;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
@@ -34,15 +39,35 @@ public class ExcelImportCommonListener<T> implements ReadListener<T> {
      * 具体数据落库的业务逻辑方法：此处的逻辑是将数据从excel中读取出来后，然后进行自己的业务处理，最后进行落库操作
      * 不懂的可以参考：UserServiceImpl下的saveUserList方法案例
      */
-    private final Consumer<List<T>> persistentActionMethod;
+    private final ThrowingConsumer<List<T>> persistentActionMethod;
 
     /**
-     * 构造函数
+     * 异常日志记录(可用于记录解析excel数据时存储异常信息，用于业务的事务的回滚)
+     */
+    private List<String> errorLogList = new ArrayList<>();
+
+    /**
+     * 用于测试异常变量
+     */
+    private Long count = 1000L;
+
+    /**
+     * 构造函数(不包含异常信息)
      *
      * @param persistentActionMethod 从excel读取到的数据到落库的业务逻辑
      */
-    public ExcelImportCommonListener(Consumer<List<T>> persistentActionMethod) {
+    public ExcelImportCommonListener(ThrowingConsumer<List<T>> persistentActionMethod) {
         this.persistentActionMethod = persistentActionMethod;
+    }
+
+    /**
+     * 构造函数(不包含异常信息)
+     *
+     * @param persistentActionMethod 从excel读取到的数据到落库的业务逻辑
+     */
+    public ExcelImportCommonListener(ThrowingConsumer<List<T>> persistentActionMethod, List<String> errorLogLIst) {
+        this.persistentActionMethod = persistentActionMethod;
+        this.errorLogList = errorLogLIst;
     }
 
     /**
@@ -58,7 +83,13 @@ public class ExcelImportCommonListener<T> implements ReadListener<T> {
         if (exception instanceof ExcelDataConvertException) {
             ExcelDataConvertException excelDataConvertException = (ExcelDataConvertException) exception;
             log.error("第{}行，第{}列解析异常，数据为:{}", excelDataConvertException.getRowIndex(),
-                    excelDataConvertException.getColumnIndex(), excelDataConvertException.getCellData());
+                    excelDataConvertException.getColumnIndex(), excelDataConvertException.getCellData().getStringValue());
+            if (Objects.nonNull(errorLogList)) {
+                // 记录异常日志
+                String errorLog = "第" + excelDataConvertException.getRowIndex() + "行，第" + excelDataConvertException.getColumnIndex()
+                        + "列解析异常，数据为:" + excelDataConvertException.getCellData().getStringValue() + "";
+                errorLogList.add(errorLog);
+            }
         }
     }
 
@@ -72,6 +103,9 @@ public class ExcelImportCommonListener<T> implements ReadListener<T> {
     public void invokeHead(Map<Integer, ReadCellData<?>> headMap, AnalysisContext context) {
         Map<Integer, String> headMapping = ConverterUtils.convertToStringMap(headMap, context);
         log.info("表头数据: " + StrUtil.toString(headMapping));
+        if (CollUtil.isEmpty(headMapping)) {
+            errorLogList.add("The header of file can't be empty!");
+        }
     }
 
     /**
@@ -82,13 +116,25 @@ public class ExcelImportCommonListener<T> implements ReadListener<T> {
      */
     @Override
     public void invoke(T t, AnalysisContext analysisContext) {
-        persistentDataList.add(t);
-        // 当数据达到最大插入数量后则进行落库操作，防止大数量情况下OOM
-        if (persistentDataList.size() > ImportConstant.MAX_INSERT_COUNT) {
-            // 进行业务数据插入
-            this.persistentDataToDb(persistentDataList);
-            // 清空集合
-            persistentDataList.clear();
+        try {
+            // 如果对实体需要设置其他额外属性，可以通过反射方式，如下面的relationId属性
+            Class<?> aClass = t.getClass();
+            Field relationIdField = aClass.getDeclaredField("relationId");
+            relationIdField.setAccessible(Boolean.TRUE);
+            relationIdField.set(t, count++);
+        } catch (Exception e) {
+            log.error("in error{}", e);
+            errorLogList.add("The Row Data inject relationId field in error");
+        }
+        if (Objects.isNull(errorLogList) || CollUtil.isEmpty(errorLogList)) {
+            persistentDataList.add(t);
+            // 当数据达到最大插入数量后则进行落库操作，防止大数量情况下OOM
+            if (persistentDataList.size() >= ImportConstant.MAX_INSERT_COUNT) {
+                // 进行业务数据插入
+                this.persistentDataToDb(persistentDataList);
+                // 清空集合
+                persistentDataList.clear();
+            }
         }
     }
 
