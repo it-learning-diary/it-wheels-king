@@ -1,5 +1,7 @@
 package cn.it.learning.model;
 
+import com.alibaba.excel.annotation.ExcelIgnore;
+import com.alibaba.excel.annotation.ExcelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,7 +15,12 @@ import lombok.Setter;
 @Setter
 public class UserDto {
 
+//    @ExcelProperty(index = 0)
     private Integer id;
+//    @ExcelProperty(index = 1)
     private String name;
+//    @ExcelProperty(index = 2)
     private String password;
+    @ExcelIgnore
+    private Long relationId;
 }

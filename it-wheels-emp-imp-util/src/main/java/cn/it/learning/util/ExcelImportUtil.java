@@ -1,10 +1,10 @@
 package cn.it.learning.util;
 
+import cn.it.learning.refactor.ThrowingConsumer;
 import com.alibaba.excel.EasyExcel;
 
 import java.io.InputStream;
 import java.util.List;
-import java.util.function.Consumer;
 
 /**
  * @Author it-learning-diary
@@ -22,10 +22,9 @@ public class ExcelImportUtil<T> {
      * @param rowAction 将接收到的实体进行自定义的业务处理逻辑方法
      * @param <T> 实体类型
      */
-    public static <T> void importFile(InputStream fileStream, T rowDto, Consumer<List<T>> rowAction) {
+    public static <T> void importFile(InputStream fileStream, T rowDto, ThrowingConsumer<List<T>> rowAction) {
         // 获取excel通用监听器
         ExcelImportCommonListener<T> commonListener = new ExcelImportCommonListener<>(rowAction);
-
         // 读取excel文件并导入
         EasyExcel.read(fileStream, rowDto.getClass(), commonListener).sheet().doRead();
     }

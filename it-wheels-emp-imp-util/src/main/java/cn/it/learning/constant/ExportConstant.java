@@ -29,4 +29,9 @@ public class ExportConstant {
      * 导出的sheet页命名
      */
     public static final String SHEET_NAME = "sheet";
+
+    /**
+     * 导出单元格默认大小
+     */
+    public static final Integer DEFAULT_CELL_LENGTH = 20;
 }

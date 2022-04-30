@@ -101,7 +101,7 @@ public class ExcelExportUtil<T> {
             response.setHeader(ExportConstant.CONTENT_DISPOSITION, ExportConstant.ATTACHMENT_FILENAME + fileName + ExportConstant.XLSX_SUFFIX);
             // 设置默认样式的excel表格对象
             HorizontalCellStyleStrategy horizontalCellStyleStrategy = getExportDefaultStyle();
-            AbstractColumnWidthStyleStrategy columnWidthStyleStrategy = new SimpleColumnWidthStyleStrategy(20);
+            AbstractColumnWidthStyleStrategy columnWidthStyleStrategy = new SimpleColumnWidthStyleStrategy(ExportConstant.DEFAULT_CELL_LENGTH);
             writer = EasyExcel.write(response.getOutputStream()).registerWriteHandler(horizontalCellStyleStrategy).registerWriteHandler(columnWidthStyleStrategy).build();
             for (int i = 0; i < exportData.size(); i++) {
                 List<List<T>> tableData = exportData.get(i);
@@ -115,6 +115,24 @@ public class ExcelExportUtil<T> {
         }
     }
 
+    /**
+     * 下载指定路径下的模板
+     *
+     * @param filePath 文件所在路径(包含模板名称)：一般是放在项目的resources目录下的temolate
+     * @param fileName 下载时默认的文件名称
+     * @param response 响应流
+     */
+    public static void downloadTemplate(String filePath, String fileName, HttpServletResponse response) {
+        try {
+            // 设置浏览器以附件形式读取响应流中的数据
+            response.setContentType(ExportConstant.EXCEL_CONTENT_TYPE);
+            response.setCharacterEncoding(ExportConstant.UTF_8);
+            response.setHeader(ExportConstant.CONTENT_DISPOSITION, ExportConstant.ATTACHMENT_FILENAME + fileName + ExportConstant.XLSX_SUFFIX);
+            FileUtil.writeToStream(filePath, response.getOutputStream());
+        } catch (Exception e) {
+            log.error("ExcelExportUtil downloadTemplate in error:{}", e);
+        }
+    }
 
     /**
      * 配置默认的excel表格样式对象

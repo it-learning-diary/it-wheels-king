@@ -8,10 +8,11 @@ import cn.it.learning.model.UserExportVo;
 import cn.it.learning.util.ExcelExportUtil;
 import cn.it.learning.util.ExcelImportUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,23 +44,39 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> {
 
     private static UserServiceImpl userService;
 
-    @PostConstruct
-    public void init() {
-        userService = this;
+    @Autowired
+    public void setUserMapper(UserServiceImpl userService) {
+        UserServiceImpl.userService = userService;
     }
+
+//    @PostConstruct
+//    public void init() {
+//        userService = this;
+//    }
 
 
     /**
-     * 导入用户数据
+     * 导入用户数据案例
      *
      * @param file
      */
-    public void uploadUserList(MultipartFile file) throws Exception {
+    @Transactional(rollbackFor = Exception.class)
+    public void uploadUserListDemo(MultipartFile file, String username) throws Exception {
+        User user = new User();
+        user.setId(100);
+        user.setName("外层");
+        user.setPassword("外层");
+        userService.save(user);
         // 调用统一导入方法
         ExcelImportUtil.importFile(file.getInputStream(), new UserDto(), UserServiceImpl::saveUserList);
     }
 
-    public void downloadUserList(HttpServletResponse response) {
+    /**
+     * 导出案例
+     *
+     * @param response
+     */
+    public void exportUserListDemo(HttpServletResponse response) {
         // 表头(使用excel中的注解定义，如果表头不固定，请使用ExcelExportUtil.exportWithDynamicData进行导出)
         List<UserExportVo> head = Stream.of(new UserExportVo()).collect(Collectors.toList());
         // 数据(使用两层list为了兼容多个sheet页，如果是不同的sheet页则放在不同的List集合中)
@@ -80,6 +97,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> {
     }
 
     /**
+     * 下载指定目录下的模板案例
+     *
+     * @param filePath
+     * @param saveFileName
+     * @param response
+     */
+    public void downloadTemplateDemo(String filePath, String saveFileName, HttpServletResponse response) {
+        ExcelExportUtil.downloadTemplate(filePath, saveFileName, response);
+    }
+
+    /**
      * 实际处理从excel中读取出来数据的业务方法(根据自己业务需求定义)
      *
      * @param userDtoList
@@ -96,5 +124,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> {
 
         // 使用mybatis-plus自带的api方式插入
         userService.saveBatch(userList);
+
+        // 测试落盘异常时是否会进行事务回滚
+//        Long l = userDtoList.get(2).getRelationId();
+//        if (l == 1002l) {
+//            int i = 1 / 0;
+//            System.out.println(i);
+//        }
+
     }
 }
