@@ -1,0 +1,11 @@
+server:
+  port: 9000
+spring:
+  application:
+    name: it-wheels-king
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://ip:port/user?characterEncoding=utf8
+    username: user
+    password: 123456
+    type: com.alibaba.druid.pool.DruidDataSource
