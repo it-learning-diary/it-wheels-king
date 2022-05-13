@@ -5,6 +5,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.resource.ClassPathResource;
+import cn.hutool.core.io.resource.ResourceUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.it.learning.constant.ExportConstant;
 import com.alibaba.excel.EasyExcel;
@@ -128,7 +129,8 @@ public class ExcelExportUtil<T> {
             response.setContentType(ExportConstant.EXCEL_CONTENT_TYPE);
             response.setCharacterEncoding(ExportConstant.UTF_8);
             response.setHeader(ExportConstant.CONTENT_DISPOSITION, ExportConstant.ATTACHMENT_FILENAME + fileName + ExportConstant.XLSX_SUFFIX);
-            FileUtil.writeToStream(filePath, response.getOutputStream());
+            byte[] bytes = ResourceUtil.readBytes(filePath);
+            response.getOutputStream().write(bytes);
         } catch (Exception e) {
             log.error("ExcelExportUtil downloadTemplate in error:{}", e);
         }
