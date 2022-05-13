@@ -1,20 +1,12 @@
 package cn.it.learning.util;
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.io.FileUtil;
-import cn.hutool.core.io.resource.ClassPathResource;
 import cn.hutool.core.io.resource.ResourceUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.it.learning.constant.ExportConstant;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelWriter;
-import com.alibaba.excel.annotation.ExcelProperty;
-import com.alibaba.excel.context.AnalysisContext;
-import com.alibaba.excel.exception.ExcelAnalysisException;
-import com.alibaba.excel.read.metadata.holder.xlsx.XlsxReadSheetHolder;
-import com.alibaba.excel.util.StringUtils;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.alibaba.excel.write.metadata.style.WriteCellStyle;
 import com.alibaba.excel.write.metadata.style.WriteFont;
@@ -23,16 +15,12 @@ import com.alibaba.excel.write.style.column.AbstractColumnWidthStyleStrategy;
 import com.alibaba.excel.write.style.column.SimpleColumnWidthStyleStrategy;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
-import org.apache.poi.util.IOUtils;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Field;
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * @Author it-learning
