@@ -131,7 +131,7 @@ public class ExcelExportUtil<T> {
             response.setHeader(ExportConstant.CONTENT_DISPOSITION, ExportConstant.ATTACHMENT_FILENAME + fileName + ExportConstant.XLSX_SUFFIX);
             byte[] bytes = ResourceUtil.readBytes(filePath);
             response.getOutputStream().write(bytes);
-        } catch (Exception e) {
+        } catch (Exception e) { 
             log.error("ExcelExportUtil downloadTemplate in error:{}", e);
         }
     }
