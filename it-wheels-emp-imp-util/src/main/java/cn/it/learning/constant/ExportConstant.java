@@ -26,6 +26,12 @@ public class ExportConstant {
     public static final String XLSX_SUFFIX = ".xlsx";
 
     /**
+     * 导出的文件后缀
+     */
+    public static final String CSV_SUFFIX = ".csv";
+
+
+    /**
      * 导出的sheet页命名
      */
     public static final String SHEET_NAME = "sheet";

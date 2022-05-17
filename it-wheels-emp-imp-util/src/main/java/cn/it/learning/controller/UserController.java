@@ -42,12 +42,21 @@ public class UserController {
     }
 
     /**
-     * 导出案例
+     * 导出模板案例
      * @param response
      */
     @PostMapping("/user/download/template")
     public void downloadUserTemplate(HttpServletResponse response,String filePath,String saveFileName) {
         userService.downloadTemplateDemo(filePath, saveFileName, response);
+    }
+
+    /**
+     * 导出案例
+     * @param response
+     */
+    @PostMapping("/user/export/csv")
+    public void exportUserListWithCsv(HttpServletResponse response) {
+        userService.exportUserListWithCsv(response);
     }
 
 }

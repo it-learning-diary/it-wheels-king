@@ -4,7 +4,9 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.it.learning.mapper.UserMapper;
 import cn.it.learning.model.User;
 import cn.it.learning.model.UserDto;
+import cn.it.learning.model.UserExportCsvVo;
 import cn.it.learning.model.UserExportVo;
+import cn.it.learning.util.CsvExportUtil;
 import cn.it.learning.util.ExcelExportUtil;
 import cn.it.learning.util.ExcelImportUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -105,6 +107,37 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> {
      */
     public void downloadTemplateDemo(String filePath, String saveFileName, HttpServletResponse response) {
         ExcelExportUtil.downloadTemplate(filePath, saveFileName, response);
+    }
+
+    /**
+     * 导出案例
+     *
+     * @param response
+     */
+    public void exportUserListWithCsv(HttpServletResponse response) {
+        List<UserExportCsvVo> exportItem = new ArrayList<>();
+        // 查询数据
+        List<User> dbData = userService.list();
+        // 将数据转换成导出需要的实际数据格式,此处只是演示
+//        for (User user : dbData) {
+//            UserExportCsvVo vo = new UserExportCsvVo();
+//            BeanUtil.copyProperties(user, vo);
+//            exportItem.add(vo);
+//        }
+        // 使用bean字段的方式作为表头，导出csv文件
+        //CsvExportUtil.exportCsvWithBean(response,"demo",new UserExportCsvVo(),exportItem);
+
+        // 使用字符串数组方式作为表头导出csv数据
+        List<Object> head = Stream.of("id", "name", "password").collect(Collectors.toList());
+        List<List<Object>> dataList = new ArrayList<>();
+        for (User user : dbData) {
+            List<Object> row = new ArrayList<>();
+            row.add(user.getId());
+            row.add(user.getName());
+            row.add(user.getPassword());
+            dataList.add(row);
+        }
+        CsvExportUtil.exportCsvWithString(response,"demo",head,dataList);
     }
 
     /**
