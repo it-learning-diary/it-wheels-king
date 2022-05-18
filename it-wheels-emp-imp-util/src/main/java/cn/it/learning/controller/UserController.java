@@ -51,12 +51,23 @@ public class UserController {
     }
 
     /**
-     * 导出案例
+     * csv导出案例
      * @param response
      */
     @PostMapping("/user/export/csv")
     public void exportUserListWithCsv(HttpServletResponse response) {
         userService.exportUserListWithCsv(response);
+    }
+
+    /**
+     * csv导入案例
+     *
+     * @param file
+     * @throws Exception
+     */
+    @PostMapping("/user/upload/csv")
+    public void uploadUserListWithCsv(@RequestBody MultipartFile file) throws Exception {
+        userService.uploadUserListWithCsv(file);
     }
 
 }
