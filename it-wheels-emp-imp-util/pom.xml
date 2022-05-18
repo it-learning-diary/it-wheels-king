@@ -33,6 +33,7 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- excel文件处理依赖 -->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>easyexcel</artifactId>
@@ -56,6 +57,14 @@
             <artifactId>postgresql</artifactId>
             <version>42.2.5</version>
         </dependency>
+
+        <!-- csv解析依赖文件 -->
+        <dependency>
+            <groupId>com.univocity</groupId>
+            <artifactId>univocity-parsers</artifactId>
+            <version>2.9.1</version>
+        </dependency>
+
     </dependencies>
 
 
