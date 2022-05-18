@@ -1,12 +1,12 @@
 package cn.it.learning.service;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.it.learning.mapper.UserMapper;
-import cn.it.learning.model.User;
-import cn.it.learning.model.UserDto;
-import cn.it.learning.model.UserExportCsvVo;
-import cn.it.learning.model.UserExportVo;
+import cn.it.learning.model.*;
 import cn.it.learning.util.CsvExportUtil;
+import cn.it.learning.util.CsvImportUtil;
 import cn.it.learning.util.ExcelExportUtil;
 import cn.it.learning.util.ExcelImportUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -137,7 +137,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> {
             row.add(user.getPassword());
             dataList.add(row);
         }
-        CsvExportUtil.exportCsvWithString(response,"demo",head,dataList);
+        CsvExportUtil.exportCsvWithString(response, "demo", head, dataList);
     }
 
     /**
@@ -164,6 +164,66 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> {
 //            int i = 1 / 0;
 //            System.out.println(i);
 //        }
+    }
 
+    /**
+     * 导入用户数据案例（csv模式）
+     *
+     * @param file
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void uploadUserListWithCsv(MultipartFile file) throws Exception {
+        User user = new User();
+        user.setId(100);
+        user.setName("外层");
+        user.setPassword("外层");
+        userService.save(user);
+        List<String> errorLogList = new ArrayList<>();
+        // 调用统一导入方法
+        // 方式一：使用csv数据映射到dto实体的方式进行数据导入
+        //CsvImportUtil.importCsvWithBean(file.getInputStream(), errorLogList, UserCsvDto.class, UserServiceImpl::saveUserListWithCsv);
+
+        // 方式二、使用csv数据映射到字符串数组的方式进行数据导入
+        CsvImportUtil.importCsvWithString(file.getInputStream(), errorLogList, UserCsvDto.class,UserServiceImpl::saveUserListWithCsvStringArrDemo);
+
+        // 如果存在解析异常，输出解析异常并进行事务回滚
+        if (CollUtil.isNotEmpty(errorLogList)) {
+            throw new RuntimeException(StrUtil.toString(errorLogList));
+        }
+    }
+
+    /**
+     * 方式一、csv数据映射到字符串数组，进行落库操作
+     *
+     * @param userDtoArray
+     */
+    private static void saveUserListWithCsvStringArrDemo(List<String[]> userDtoArray) {
+        List<User> userList = new ArrayList<>();
+        for (String[] valueArr : userDtoArray) {
+            User user = new User();
+            user.setId(Integer.valueOf(valueArr[0]));
+            user.setName(valueArr[1]);
+            user.setPassword(valueArr[2]);
+            userList.add(user);
+        }
+        userService.saveBatch(userList);
+    }
+
+
+    /**
+     * 方式二：csv数据映射到dto实体，进行落库操作
+     * <p>
+     * 实际处理从csv中读取出来数据的业务方法(根据自己业务需求定义)
+     *
+     * @param userDtoList
+     */
+    private static void saveUserListWithCsv(List<UserCsvDto> userDtoList) {
+        List<User> userList = new ArrayList<>();
+        for (UserCsvDto userDto : userDtoList) {
+            User user = new User();
+            BeanUtil.copyProperties(userDto, user);
+            userList.add(user);
+        }
+        userService.saveBatch(userList);
     }
 }

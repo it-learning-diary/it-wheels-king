@@ -14,6 +14,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UserExportCsvVo {
+    /**
+     * Parsed注解将属性名称映射到CSV文件中
+     */
     @Parsed(field = "主键")
     private Integer id;
     @Parsed(field = "姓名")
