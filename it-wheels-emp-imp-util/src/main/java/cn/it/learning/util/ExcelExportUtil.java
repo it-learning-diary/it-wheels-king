@@ -111,12 +111,12 @@ public class ExcelExportUtil<T> {
      * @param fileName 下载时默认的文件名称
      * @param response 响应流
      */
-    public static void downloadTemplate(String filePath, String fileName, HttpServletResponse response) {
+    public static void downloadTemplate(String filePath, String fileName,String fileSuffix, HttpServletResponse response) {
         try {
             // 设置浏览器以附件形式读取响应流中的数据
             response.setContentType(ExportConstant.EXCEL_CONTENT_TYPE);
             response.setCharacterEncoding(ExportConstant.UTF_8);
-            response.setHeader(ExportConstant.CONTENT_DISPOSITION, ExportConstant.ATTACHMENT_FILENAME + fileName + ExportConstant.XLSX_SUFFIX);
+            response.setHeader(ExportConstant.CONTENT_DISPOSITION, ExportConstant.ATTACHMENT_FILENAME + fileName + fileSuffix);
             byte[] bytes = ResourceUtil.readBytes(filePath);
             response.getOutputStream().write(bytes);
         } catch (Exception e) {

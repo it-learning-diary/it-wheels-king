@@ -5,6 +5,7 @@ import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.it.learning.constant.ImportConstant;
 import cn.it.learning.refactor.ThrowingConsumer;
+import cn.it.learning.valid.ImportValid;
 import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.enums.CellDataTypeEnum;
 import com.alibaba.excel.exception.ExcelDataConvertException;
@@ -126,6 +127,8 @@ public class ExcelImportCommonListener<T> implements ReadListener<T> {
             log.error("in error{}", e);
             errorLogList.add("The Row Data inject relationId field in error");
         }
+        // 校验导入字段
+        ImportValid.validRequireField(t,errorLogList);
         if (Objects.isNull(errorLogList) || CollUtil.isEmpty(errorLogList)) {
             persistentDataList.add(t);
             // 当数据达到最大插入数量后则进行落库操作，防止大数量情况下OOM

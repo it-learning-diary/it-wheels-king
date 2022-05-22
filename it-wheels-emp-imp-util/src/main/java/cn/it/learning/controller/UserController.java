@@ -22,36 +22,42 @@ public class UserController {
     private UserServiceImpl userService;
 
     /**
-     * 导入案例
+     * 导入excel案例
      *
      * @param file
      * @throws Exception
      */
     @PostMapping("/user/upload")
-    public void uploadUserList(@RequestBody MultipartFile file,String username) throws Exception {
-        userService.uploadUserListDemo(file,username);
+    public void uploadUserListWithExcel(@RequestBody MultipartFile file, String username) throws Exception {
+        userService.uploadUserListDemoWithExcel(file, username);
     }
 
     /**
-     * 导出案例
+     * 导出excel案例
+     *
      * @param response
      */
     @PostMapping("/user/export")
-    public void exportUserList(HttpServletResponse response) {
-        userService.exportUserListDemo(response);
+    public void exportUserListWithExcel(HttpServletResponse response) {
+        userService.exportUserListDemoWithExcel(response);
     }
 
     /**
-     * 导出模板案例
+     * 导出指定路径下模板案例
+     *
      * @param response
+     * @param filePath     文件所在路径(包含模板名称)：一般是放在项目的resources目录下的temolate
+     * @param fileSuffix   导出的文件后缀如xlsx、csv等
+     * @param saveFileName 下载后的模板名称如demo
      */
     @PostMapping("/user/download/template")
-    public void downloadUserTemplate(HttpServletResponse response,String filePath,String saveFileName) {
-        userService.downloadTemplateDemo(filePath, saveFileName, response);
+    public void downloadUserTemplate(HttpServletResponse response, String filePath, String saveFileName, String fileSuffix) {
+        userService.downloadTemplateDemo(filePath, saveFileName, fileSuffix, response);
     }
 
     /**
      * csv导出案例
+     *
      * @param response
      */
     @PostMapping("/user/export/csv")
