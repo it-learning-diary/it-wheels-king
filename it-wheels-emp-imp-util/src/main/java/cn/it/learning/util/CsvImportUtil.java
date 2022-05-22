@@ -4,9 +4,8 @@ package cn.it.learning.util;
 import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.it.learning.constant.ImportConstant;
-import cn.it.learning.model.UserCsvDto;
 import cn.it.learning.refactor.ThrowingConsumer;
-import com.univocity.parsers.common.Context;
+import cn.it.learning.valid.ImportValid;
 import com.univocity.parsers.common.DataProcessingException;
 import com.univocity.parsers.common.ParsingContext;
 import com.univocity.parsers.common.RetryableErrorHandler;
@@ -14,11 +13,8 @@ import com.univocity.parsers.common.processor.BeanListProcessor;
 import com.univocity.parsers.common.processor.RowListProcessor;
 import com.univocity.parsers.csv.CsvParser;
 import com.univocity.parsers.csv.CsvParserSettings;
-import org.apache.commons.compress.utils.Lists;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,7 +26,6 @@ import java.util.List;
 public class CsvImportUtil<T> {
 
     /**
-     *
      * @param inputStream
      * @param errorList
      * @param rowDto
@@ -84,6 +79,11 @@ public class CsvImportUtil<T> {
         csvParser.parse(inputStream);
         // 获取数据映射后的集合
         List<T> dataList = rowProcessor.getBeans();
+        // 校验必填字段
+        for (T row : dataList) {
+            // 校验导入字段
+            ImportValid.validRequireField(row, errorList);
+        }
         // 执行数据持久化
         persistentBeanDataToDb(dataList, rowAction);
     }

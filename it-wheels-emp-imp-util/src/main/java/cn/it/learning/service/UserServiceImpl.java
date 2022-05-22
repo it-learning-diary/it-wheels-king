@@ -2,7 +2,9 @@ package cn.it.learning.service;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.io.FileTypeUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.it.learning.constant.ImportConstant;
 import cn.it.learning.mapper.UserMapper;
 import cn.it.learning.model.*;
 import cn.it.learning.util.CsvExportUtil;
@@ -63,7 +65,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> {
      * @param file
      */
     @Transactional(rollbackFor = Exception.class)
-    public void uploadUserListDemo(MultipartFile file, String username) throws Exception {
+    public void uploadUserListDemoWithExcel(MultipartFile file, String username) throws Exception {
+        // 此处先校验导入的文件类型是否为excel
+        String type = FileTypeUtil.getType(file.getInputStream());
+        if (StrUtil.isBlank(type) || type.contains(ImportConstant.XLS_TYPE) || type.contains(ImportConstant.XLSX_TYPE)) {
+            // 返回校验失败信息
+            return;
+        }
         User user = new User();
         user.setId(100);
         user.setName("外层");
@@ -78,7 +86,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> {
      *
      * @param response
      */
-    public void exportUserListDemo(HttpServletResponse response) {
+    public void exportUserListDemoWithExcel(HttpServletResponse response) {
         // 表头(使用excel中的注解定义，如果表头不固定，请使用ExcelExportUtil.exportWithDynamicData进行导出)
         List<UserExportVo> head = Stream.of(new UserExportVo()).collect(Collectors.toList());
         // 数据(使用两层list为了兼容多个sheet页，如果是不同的sheet页则放在不同的List集合中)
@@ -105,8 +113,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> {
      * @param saveFileName
      * @param response
      */
-    public void downloadTemplateDemo(String filePath, String saveFileName, HttpServletResponse response) {
-        ExcelExportUtil.downloadTemplate(filePath, saveFileName, response);
+    public void downloadTemplateDemo(String filePath, String saveFileName, String fileSuffix, HttpServletResponse response) {
+        ExcelExportUtil.downloadTemplate(filePath, saveFileName, fileSuffix, response);
     }
 
     /**
@@ -173,6 +181,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> {
      */
     @Transactional(rollbackFor = Exception.class)
     public void uploadUserListWithCsv(MultipartFile file) throws Exception {
+        // 此处先校验导入的文件类型是否为csv
+        String type = FileTypeUtil.getType(file.getInputStream());
+        if (StrUtil.isBlank(type) || type.contains(ImportConstant.CSV_TYPE)) {
+            // 返回校验失败信息
+            return;
+        }
         User user = new User();
         user.setId(100);
         user.setName("外层");
@@ -184,7 +198,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> {
         //CsvImportUtil.importCsvWithBean(file.getInputStream(), errorLogList, UserCsvDto.class, UserServiceImpl::saveUserListWithCsv);
 
         // 方式二、使用csv数据映射到字符串数组的方式进行数据导入
-        CsvImportUtil.importCsvWithString(file.getInputStream(), errorLogList, UserCsvDto.class,UserServiceImpl::saveUserListWithCsvStringArrDemo);
+        CsvImportUtil.importCsvWithString(file.getInputStream(), errorLogList, UserCsvDto.class, UserServiceImpl::saveUserListWithCsvStringArrDemo);
 
         // 如果存在解析异常，输出解析异常并进行事务回滚
         if (CollUtil.isNotEmpty(errorLogList)) {

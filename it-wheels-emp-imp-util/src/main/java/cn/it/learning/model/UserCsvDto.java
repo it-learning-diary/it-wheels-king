@@ -1,7 +1,7 @@
 package cn.it.learning.model;
 
+import cn.it.learning.annotation.ImportFieldValid;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.univocity.parsers.annotations.Headers;
 import com.univocity.parsers.annotations.Parsed;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,12 +19,16 @@ import lombok.Setter;
 public class UserCsvDto {
     /**
      * Parsed注解将属性名称映射到CSV文件字段名称绑定，也可以使用:index字段指定映射的位置
+     * ImportFieldValid 自定义注解，用于判断导入文件中必填字段是否满足条件
      */
     @Parsed(field = "id")
+    @ImportFieldValid(message = "用户ID不能为空")
     private Integer id;
     @Parsed(field = "name")
+    @ImportFieldValid(message = "用户名称不能为空")
     private String name;
     @Parsed(field = "pass")
+    @ImportFieldValid(message = "用户密码不能为空")
     private String password;
     /**
      * 日期格式字段示例如下：
