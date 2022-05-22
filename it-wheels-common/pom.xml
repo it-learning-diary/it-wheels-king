@@ -12,4 +12,12 @@
     <artifactId>it-wheels-common</artifactId>
     <description>轮子公用工具包</description>
 
+    <dependencies>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>5.7.22</version>
+        </dependency>
+    </dependencies>
+
 </project>
