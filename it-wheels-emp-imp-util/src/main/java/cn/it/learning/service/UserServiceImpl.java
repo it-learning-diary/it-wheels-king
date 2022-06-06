@@ -18,8 +18,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -104,6 +106,56 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> {
         // sheet页名称-自定义，如果没有则传空
         List<String> sheetNameList = Stream.of("sheet1").collect(Collectors.toList());
         ExcelExportUtil.exportFile("user", head, exportDataList, sheetNameList, response);
+    }
+
+    /**
+     * 表头数据不固定导出案例
+     *
+     * @param response
+     */
+    public void exportUserListDynamicDemoWithExcel(HttpServletResponse response) {
+        try {
+            // 表头
+            List<List<List<String>>> head = new ArrayList<>();
+            List<List<String>> headRowList = new ArrayList<>();
+
+            // 数据(使用两层list为了兼容多个sheet页，如果是不同的sheet页则放在不同的List集合中)
+            List<List<List<String>>> exportDataList = new ArrayList<>();
+            List<List<String>> rowList = new ArrayList<>();
+
+            // 查询数据
+            List<User> dbData = userService.list();
+
+            // 使用反射接收导出的数据(反射可以保证如果获取到的数据字段新增或者减少，同时可以不变动代码情况下动态导出)
+            for (User user : dbData) {
+                List<String> exportItem = new ArrayList<>();
+                // 使用反射获取实体中的所有属性，或者直接指定需要导出的属性
+                Class<? extends User> userClass = user.getClass();
+                Field[] fields = userClass.getDeclaredFields();
+                for (int index = 0; index < fields.length; index++) {
+                    // 组装数据
+                    Field field = fields[index];
+                    field.setAccessible(Boolean.TRUE);
+                    Object value = field.get(user);
+                    List<String> rowHead = new ArrayList<>();
+                    exportItem.add(Objects.nonNull(value) ? String.valueOf(value) : "");
+                    // 组装表头(一个sheet页表头只要组装一次就好，如果是多个sheet页，需要进行修改)
+                    if(CollUtil.isEmpty(rowList)){
+                        rowHead.add(field.getName());
+                        headRowList.add(rowHead);
+                    }
+                }
+                rowList.add(exportItem);
+            }
+            head.add(headRowList);
+            exportDataList.add(rowList);
+            // sheet页名称-自定义，如果没有则传空
+            List<String> sheetNameList = Stream.of("sheet1").collect(Collectors.toList());
+            ExcelExportUtil.exportWithDynamicData("user", head, exportDataList, sheetNameList, response);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
     }
 
     /**
