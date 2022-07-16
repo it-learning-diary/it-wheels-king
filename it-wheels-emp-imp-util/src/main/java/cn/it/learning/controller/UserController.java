@@ -43,6 +43,17 @@ public class UserController {
     }
 
     /**
+     * 场景: 表头不固定，动态导出数据
+     * 动态导出导出excel案例
+     *
+     * @param response
+     */
+    @PostMapping("/user/export/dynamic/excel")
+    public void exportUserDynamicListWithExcel(HttpServletResponse response) {
+        userService.exportUserListDynamicDemoWithExcel(response);
+    }
+
+    /**
      * 导出指定路径下模板案例
      *
      * @param response
