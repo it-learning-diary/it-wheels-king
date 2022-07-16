@@ -76,6 +76,13 @@
             <artifactId>commons-net</artifactId>
             <version>3.6</version>
         </dependency>
+
+        <!-- seaweedfs上传下载依赖包 -->
+        <dependency>
+            <groupId>org.lokra.seaweedfs</groupId>
+            <artifactId>seaweedfs-client</artifactId>
+            <version>0.7.3.RELEASE</version>
+        </dependency>
     </dependencies>
 
 
