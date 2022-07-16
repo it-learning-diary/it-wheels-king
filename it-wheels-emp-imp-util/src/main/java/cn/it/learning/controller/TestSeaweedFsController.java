@@ -56,8 +56,6 @@ public class TestSeaweedFsController {
     @RequestMapping("download")
     public void downloadFile(HttpServletResponse response, HttpServletRequest request, String fileId, String fileName) {
         try {
-            fileId = "3,03c59eb9f1";
-            fileName = "中文标题.png";
             seaweedFsUtil.downloadFileByFid(response, request, fileId, fileName);
         } catch (Exception e) {
             log.error("TestSeaweedFsController downloadFile in error:{}", e);
