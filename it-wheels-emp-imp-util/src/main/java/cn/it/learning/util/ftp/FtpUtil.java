@@ -5,8 +5,10 @@ import cn.it.learning.model.test.ftp.FtpUploadParam;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPFile;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -20,7 +22,7 @@ import java.util.Objects;
  * @Version 1.0
  */
 @Slf4j
-@Configuration
+@Component
 public class FtpUtil {
     /**
      * ftp客户端文件使用的字符集
@@ -154,5 +156,37 @@ public class FtpUtil {
             }
         }
         return downloadResult;
+    }
+
+    /**
+     * @description: 从ftp服务器下载文件到目标地址上
+     * @param: ftpClient
+     * @param: targetPath
+     * @param: destinationPath
+     * @return: 下载结果
+     * @author: rongbincheng
+     * @date: 2022/8/26 17:05
+     */
+    public Boolean downloadFileToDestination(FTPClient ftpClient, String downloadPath, String savePath) throws Exception {
+        Boolean result = null;
+        FileOutputStream outputStream = null;
+        // 切换到目标目录
+        ftpClient.changeWorkingDirectory(downloadPath);
+        // 读取到目标的所有文件，并下载到指定目录
+        FTPFile[] ftpFiles = ftpClient.listFiles();
+        try {
+            for (FTPFile ftpFile : ftpFiles) {
+                outputStream = new FileOutputStream(new File(savePath + ftpFile.getName()));
+                //result = ftpClient.retrieveFile(new String(ftpFile.getName().getBytes("GBK"),"ISO-8859-1"), outputStream);
+                result = ftpClient.retrieveFile(ftpFile.getName(), outputStream);
+                outputStream.flush();
+                outputStream.close();
+            }
+        } finally {
+            if (Objects.nonNull(outputStream)) {
+                outputStream.close();
+            }
+        }
+        return result;
     }
 }
