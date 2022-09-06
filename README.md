@@ -1,6 +1,7 @@
 ## 项目示例在线文档
 
- [轮子之王-在线文档](http://it-learning-diary.gitee.io/it-wheels-king)
+<a href="http://it-learning-diary.gitee.io/it-wheels-king" target="_blank">轮子之王-在线文档</a>
+
 
 ## 项目初衷
 
