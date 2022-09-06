@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>轮子之王</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="description" content="Description">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
+  <!-- 设置网站tab logo -->
+  <link rel="shortcut icon" href="media/favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
+  <link rel="stylesheet" href="https://cdn.tobebetterjavaer.com/tobebetterjavaer/docsify/css/style.css">
+
+  <style type="text/css">
+
+  	.footer{
+  		/*background: #dfedec; aedbd7*/
+  		background:#dfedec;
+	    border-radius: 10px;
+	    padding-top: 2px;
+	    padding-bottom: 2px;
+  	}
+
+  	a{
+  		text-decoration:none;
+  	}
+
+  	/* 全局超链接样式 */
+  	.markdown-section a{
+  		color: #009688;
+  	}
+
+  	/* 底部超联建样式 */
+  	.footer-link a{
+  		font-weight: normal;
+  		color:inherit;
+  	}
+  </style>
+</head>
+<body>
+  <div id="app">加载资源中....</div>
+  <script>
+    window.$docsify = {
+      name: '轮子之王',
+      repo: 'https://github.com/it-learning-diary/it-wheels-king',
+	  <!-- 加载侧边栏 -->
+	  loadSidebar: true,
+	  coverpage: true,
+	  <!-- 侧边栏logo-->
+	  logo: 'media/left-logo.jpg',
+	  <!--添加页面标题(根据sidebar.md生成)-->
+  	  loadSidebar: true,
+	  autoHeader: false,
+  	  // 只在访问主页时加载封面。
+  	  onlyCover: false,
+  	  // 搜索框
+  	  search: {
+        paths: 'auto',
+        placeholder: '找点什么...',
+        noData: '找不到结果',
+        depth: 3,
+      },
+	   // 导航栏
+      loadNavbar: true,
+      // 点击文档标题后跳转
+      nameLink: '/',
+      // 小屏设备下合并导航栏到侧边栏。
+      mergeNavbar: true,
+      // 在找不到指定页面时加载_404.md
+      notFoundPage: true,
+	  // 字数统计
+      count:{
+    	countable:true,
+	    fontsize:'0.9em',
+	    color:'rgb(90,90,90)',
+	    language:'chinese'
+	  },
+	  plugins: [
+        function (hook) {
+          var footer = [
+    '<div class="footer">',       
+	'<div class="copy-text">',
+		'<p align="center"><font size="1" color="#4B4646">© <a style="color:inherit;font-weight:600;" href="http://42.194.186.190/index/">IT学习日记</a>. All Rights Reserved </font></p>',
+		'<p align="center">',
+			'<font size="1" color="#4B4646">作者简介:InfoQ(极客邦)&阿里云平台签约作者，CSDN、头条、知乎、掘金等平台优质创作者,专注输出JAVA、数据库、算法等领域干货知识！</font>',
+		'</p>',
+	'</div>',
+	'<p align="center" class="footer-link">',
+	'<font size="1" color="#4B4646">',
+	'创作平台：',
+	'<a  href="https://blog.csdn.net/qq_40891009">CSDN</a> | ',
+	'<a  href="https://juejin.cn/user/686575843556008">掘金</a> | ',
+	'<a  href="https://www.infoq.cn/profile/78FD85D91DD330/publish">InfoQ</a> | ',
+	'<a  href="https://www.zhihu.com/people/qin-wei-liang-31">知乎</a> | ',
+	'<a  href="https://github.com/it-learning-diary">GitHub</a> | ',
+	'<a  href="https://gitee.com/it-learning-diary">Gitee</a> | ',
+	'<a  href="https://space.bilibili.com/326895352">哔哩哔哩</a> | ',
+	'<a  href="https://bbs.huaweicloud.com/community/usersnew/id_1640947018809587">华为云</a> | ' ,
+	'<a  href="https://developer.aliyun.com/profile/expert/6m5lptsnn4cuk">阿里云</a> ',
+	'</font>',
+	'</p>',
+	'<font size="1" color="#4B4646">',
+	'</div>'
+          ].join('');
+          hook.afterEach(function (html) {
+            var isReadme = window.location.href.indexOf("README");
+            if (isReadme === -1) {
+              // return header + html + footer;
+              return html + footer;
+            } else {
+              return html + footer;
+            }
+          });
+        }
+      ]
+    }
+  </script>
+  <!-- Docsify v4 -->
+  <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/emoji.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/zoom-image.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify-copy-code/dist/docsify-copy-code.min.js"></script>
+  <script src="//unpkg.com/docsify-count/dist/countable.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify-pagination/dist/docsify-pagination.min.js"></script>
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <script src="https://unpkg.com/docsify-plugin-flexible-alerts"></script>
+ <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-bash.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-php.min.js"></script>
+</body>
+</html>
