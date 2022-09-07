@@ -1,6 +1,6 @@
 ## 项目示例在线文档
 
-<a href="http://it-learning-diary.gitee.io/it-wheels-king" target="_blank">轮子之王使用-在线文档</a>
+<a href="http://it-learning-diary.gitee.io/it-wheels-king-inline-doc" target="_blank">轮子之王使用示例-在线文档</a>
 
 
 ## 项目初衷
@@ -10,7 +10,6 @@
 
 轮子即调即用，符合绝大部分导入导出业务逻辑，节省开发时间！
 
-<font color=red><b>说明：项目中的docs文件夹下的所有文件与项目无关，只是为了方便生成在线文档，所以引入时直接删除即可！</b></font>
 
 ## 已完成轮子
 
