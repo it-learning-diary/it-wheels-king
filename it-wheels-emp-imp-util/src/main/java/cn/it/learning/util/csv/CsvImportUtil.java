@@ -32,7 +32,7 @@ public class CsvImportUtil<T> {
      * @param rowAction
      * @param <T>
      */
-    public static <T extends Object> void importCsvWithString(InputStream inputStream, List<String> errorList, Class rowDto, ThrowingConsumer<List<String[]>> rowAction) {
+    public static <T extends Object> void importCsvWithString(InputStream inputStream, List<String> errorList, ThrowingConsumer<List<String[]>> rowAction) {
         // 定义bean解析者：用于将csv中数据绑定到实体属性中，然后存储带list集合上
         RowListProcessor rowListProcessor = new RowListProcessor();
         CsvParserSettings setting = getDefaultSetting(errorList);
