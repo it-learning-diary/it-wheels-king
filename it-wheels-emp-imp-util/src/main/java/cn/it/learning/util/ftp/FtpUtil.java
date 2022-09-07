@@ -164,7 +164,7 @@ public class FtpUtil {
      * @param: targetPath
      * @param: destinationPath
      * @return: 下载结果
-     * @author: rongbincheng
+     * @author: it-learning
      * @date: 2022/8/26 17:05
      */
     public Boolean downloadFileToDestination(FTPClient ftpClient, String downloadPath, String savePath) throws Exception {
