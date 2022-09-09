@@ -3,6 +3,7 @@ package cn.it.learning.util.file_system;
 import cn.hutool.core.util.StrUtil;
 import cn.it.learning.config.SeaweedFsConfig;
 import cn.it.learning.constant.CommonConstant;
+import cn.it.learning.util.browser.BrowserAdapterUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.Consts;
 import org.apache.http.entity.ContentType;
@@ -105,7 +106,7 @@ public class SeaweedFsUtil {
         // 设置响应头
         response.setContentType(CommonConstant.CONTENT_TYPE);
         response.setCharacterEncoding(CommonConstant.UTF_8);
-        String encodeFileName = buildingFileNameAdapterBrowser(request, fileName);
+        String encodeFileName = BrowserAdapterUtil.buildingFileNameAdapterBrowser(request, fileName);
         response.setHeader(CommonConstant.CONTENT_DISPOSITION, CommonConstant.ATTACHMENT_FILENAME + encodeFileName);
         // 读取并写入到响应输出
         InputStream inputStream = fileStream.getInputStream();
@@ -116,28 +117,5 @@ public class SeaweedFsUtil {
         fileSource.shutdown();
     }
 
-
-    /**
-     * @description: 中文名称时适配不同的浏览器
-     * @return:
-     * @author: it
-     * @date: 2022/7/16 14:48
-     */
-    private String buildingFileNameAdapterBrowser(HttpServletRequest request, String fileName) throws Exception {
-        String userAgent = request.getHeader("User-Agent");
-        // 火狐浏览器中文名称时使用Base64进行编码，格式如下：
-        // Content-Disposition: attachment;filename==?charset?B?xxx?=中文名称编码后的字符串
-        // 其中、=?：表示编码内容开始、charset:表示字符集、B:表示Base64编码、?=:表示编码内容的结束
-        if (StrUtil.isNotBlank(userAgent) && userAgent.contains("Firefox")) {
-            String encodeFileName = new BASE64Encoder().encode(fileName.getBytes(CommonConstant.UTF_8));
-            String fullName = "=?" + CommonConstant.UTF_8 + "?B?" + encodeFileName + "?=";
-            return fullName;
-        } else {
-            // 谷歌或者IE浏览器中文名称时使用urlencoder
-            // url编码实际上就是将中文汉字转换成%xx%xx的格式
-            String encodeFileName = URLEncoder.encode(fileName, CommonConstant.UTF_8);
-            return encodeFileName;
-        }
-    }
 
 }
