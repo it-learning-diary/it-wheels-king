@@ -107,7 +107,7 @@ public class ExcelExportUtil<T> {
     /**
      * 下载指定路径下的模板
      *
-     * @param filePath 文件所在路径(包含模板名称)：一般是放在项目的resources目录下的temolate
+     * @param filePath 文件所在路径(包含模板名称)：一般是放在项目的resources目录下的template
      * @param fileName 下载时默认的文件名称
      * @param response 响应流
      */
