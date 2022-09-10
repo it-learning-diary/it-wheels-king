@@ -18,16 +18,23 @@ import java.util.HashMap;
 @Slf4j
 @RestController
 public class ComplexTestController {
-
+    /**
+     * @description: 复杂模板导出案例
+     * @param:
+     * @param: response
+     * @return:
+     * @author: it-learning-diary
+     * @date: 2022/9/10 10:50
+     */
     @RequestMapping("/complex/download")
-    public void downloadComplexReport(HttpServletResponse response) throws Exception{
+    public void downloadComplexReport(HttpServletResponse response) throws Exception {
         HashMap<String, Object> hashMap = new HashMap<>();
         User user = new User();
         user.setId(1);
         user.setPassword("password");
         user.setName("name");
         hashMap.put("user", user);
-        ComplexExcelReportUtil.exportReportByBrowser(response,"/template", "report.ftl", hashMap,Boolean.FALSE,"demo.xlsx");
+        ComplexExcelReportUtil.exportReportByBrowser(response, "/template", "complex_report_word.ftl", hashMap, Boolean.FALSE, "demo.doc");
     }
 
 }

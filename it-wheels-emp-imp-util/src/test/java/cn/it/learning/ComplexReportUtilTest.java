@@ -36,7 +36,7 @@ public class ComplexReportUtilTest {
         user.setName("name");
         hashMap.put("user",user);
         OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream("D:/freemarker/demo.xlsx"));
-        ComplexExcelReportUtil.exportComplexByTemplate("/template", "report.ftl", hashMap, writer, Boolean.TRUE);
+        ComplexExcelReportUtil.exportComplexByTemplate("/template", "complex_report_excel.ftl", hashMap, writer, Boolean.TRUE);
     }
 
 }
