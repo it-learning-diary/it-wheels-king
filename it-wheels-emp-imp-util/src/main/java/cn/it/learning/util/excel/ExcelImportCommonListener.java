@@ -7,7 +7,6 @@ import cn.it.learning.constant.ImportConstant;
 import cn.it.learning.refactor.ThrowingConsumer;
 import cn.it.learning.valid.ImportValid;
 import com.alibaba.excel.context.AnalysisContext;
-import com.alibaba.excel.enums.CellDataTypeEnum;
 import com.alibaba.excel.exception.ExcelDataConvertException;
 import com.alibaba.excel.metadata.data.ReadCellData;
 import com.alibaba.excel.read.listener.ReadListener;
@@ -20,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.function.Consumer;
 
 /**
  * @Author it-learning-diary

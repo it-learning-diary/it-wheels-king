@@ -1,7 +1,6 @@
 package cn.it.learning.util.csv;
 
 import cn.it.learning.constant.ExportConstant;
-import cn.it.learning.model.UserExportVo;
 import com.univocity.parsers.common.processor.BeanWriterProcessor;
 import com.univocity.parsers.csv.CsvWriter;
 import com.univocity.parsers.csv.CsvWriterSettings;

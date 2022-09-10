@@ -1,19 +1,23 @@
-package cn.it.learning.model.test.ftp;
+package cn.it.learning.model.ftp;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.InputStream;
 
 /**
  * @Author it
- * @Description FTP下载参数类
+ * @Description FTP上传参数模拟类
  * @Date 2022/7/12 21:10
  * @Version 1.0
  */
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class FtpDownloadParam {
+public class FtpUploadParam {
     /**
      * ip或域名地址
      */
@@ -35,11 +39,11 @@ public class FtpDownloadParam {
      */
     private String workingPath;
     /**
-     *
+     * 上传文件的输入流
      */
-    private String downloadPath;
+    private InputStream inputStream;
     /**
-     * 下载的之后的文件名
+     * 上传之后的文件名
      */
-    private String fileName;
+    private String saveName;
 }

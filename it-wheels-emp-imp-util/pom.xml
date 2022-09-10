@@ -11,21 +11,17 @@
 
     <artifactId>it-wheels-emp-imp-util</artifactId>
     <description>导出、导入功能工具</description>
+    <packaging>jar</packaging>
 
     <dependencies>
 
+        <!-- scope设置为provided，不会将该依赖添加到打包中，防止在项目引用时出现冲突 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
             <version>2.6.6</version>
+            <scope>provided</scope>
         </dependency>
-
-        <!-- spring测试依赖-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-        </dependency>
-
 
         <dependency>
             <groupId>cn.hutool</groupId>
@@ -52,25 +48,13 @@
             <artifactId>mybatis-plus-boot-starter</artifactId>
             <version>3.4.3</version>
         </dependency>
-
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid-spring-boot-starter</artifactId>
-            <version>1.1.23</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>42.2.5</version>
-        </dependency>
-
         <!-- csv解析依赖文件 -->
         <dependency>
             <groupId>com.univocity</groupId>
             <artifactId>univocity-parsers</artifactId>
             <version>2.9.1</version>
         </dependency>
+        <!-- 工具组件模块 -->
         <dependency>
             <groupId>cn.it.learning</groupId>
             <artifactId>it-wheels-common</artifactId>

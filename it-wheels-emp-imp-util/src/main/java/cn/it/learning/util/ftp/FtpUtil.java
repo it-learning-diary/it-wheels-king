@@ -1,13 +1,12 @@
 package cn.it.learning.util.ftp;
 
-import cn.it.learning.model.test.ftp.FtpDownloadParam;
-import cn.it.learning.model.test.ftp.FtpUploadParam;
+import cn.it.learning.model.ftp.FtpDownloadParam;
+import cn.it.learning.model.ftp.FtpUploadParam;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -36,9 +35,16 @@ public class FtpUtil {
     private String ftpServerCharset;
 
     /**
-     * 测试连接ftp是否成功
-     *
-     * @return
+     * @description: 测试连接ftp是否成功
+     * @param:
+     * @param: ftpClient ftp链接对象
+     * @param: hostname 主机名
+     * @param: port 端口
+     * @param: username 用户名
+     * @param: password 密码
+     * @return:
+     * @author: it-learning-diary
+     * @date: 2022/9/10 17:31
      */
     public Boolean connect(FTPClient ftpClient, String hostname, Integer port, String username, String password) {
         boolean flag = false;
@@ -61,7 +67,12 @@ public class FtpUtil {
     }
 
     /**
-     * 断开ftp连接
+     * @description: 断开ftp连接
+     * @param:
+     * @param: ftpClient ftp客户端连接对象
+     * @return:
+     * @author: it-learning-diary
+     * @date: 2022/9/10 17:32
      */
     public void disconnect(FTPClient ftpClient) {
         if (ftpClient.isConnected()) {
@@ -76,9 +87,12 @@ public class FtpUtil {
 
 
     /**
-     * 上传
-     *
-     * @return
+     * @description: 上传w文件
+     * @param:
+     * @param: param 上传参数
+     * @return:
+     * @author: it-learning-diary
+     * @date: 2022/9/10 17:32
      */
     public boolean upload(FtpUploadParam param) {
         boolean flag = false;
@@ -110,8 +124,8 @@ public class FtpUtil {
     /**
      * @description: 下载ftp文件
      * @param:
-     * @param: param
-     * @param: downloadFileName
+     * @param: param 下载参数
+     * @param: downloadFileName 需要下载的文件名称
      * @return:
      * @date: 2022/7/14 10:56
      */
@@ -160,9 +174,9 @@ public class FtpUtil {
 
     /**
      * @description: 从ftp服务器下载文件到目标地址上
-     * @param: ftpClient
-     * @param: targetPath
-     * @param: destinationPath
+     * @param: ftpClient ftp客户端
+     * @param: targetPath 下载地址
+     * @param: destinationPath 保存地址
      * @return: 下载结果
      * @author: it-learning
      * @date: 2022/8/26 17:05

@@ -8,31 +8,3 @@ spring:
     multipart:
       max-file-size: 500MB
       max-request-size: 500MB
-  datasource:
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://ip:port/user?characterEncoding=utf8
-    username: user
-    password: 123456
-    type: com.alibaba.druid.pool.DruidDataSource
-ftp:
-  client:
-    # ftp客户端文件使用的字符集
-    charset: GBK
-  server:
-    # ip或者域名
-    hostname: 127.0.0.1
-    # 端口
-    port: 21
-    # 连接ftp服务器的用户名
-    username: user
-    # 密码
-    password: 123456
-    # ftp的共享文件路径
-    workingPath: D:/share/FTPServer
-    # ftp服务器文件使用的字符集
-    charset: ISO-8859-1
-
-# seaweedfs文件服务器信息
-seaweedfs:
-  host: 127.0.0.1
-  port: 9333

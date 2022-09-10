@@ -9,8 +9,6 @@ import freemarker.template.TemplateExceptionHandler;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.Writer;
 import java.util.Map;
 
@@ -22,7 +20,7 @@ import java.util.Map;
  * @Version 1.0
  */
 @Slf4j
-public class ComplexExcelReportUtil {
+public class ComplexReportUtil {
 
     /***
      * 存储FreeMarker应用核心配置，通常是应用级别的，一个应用只有一个
@@ -51,7 +49,7 @@ public class ComplexExcelReportUtil {
      */
     public static void exportComplexByTemplate(String templatePath, String templateFileName, Map<String, Object> data, Writer writer, Boolean isNeedCloseStream) throws Exception {
         // 设置模板加载路径
-        configuration.setTemplateLoader(new ClassTemplateLoader(ComplexExcelReportUtil.class, templatePath));
+        configuration.setTemplateLoader(new ClassTemplateLoader(ComplexReportUtil.class, templatePath));
         // 创建模板
         Template template = configuration.getTemplate(templateFileName);
         // 填充数据
@@ -87,7 +85,7 @@ public class ComplexExcelReportUtil {
             // 融合模板和数据
             exportComplexByTemplate(templatePath, templateFileName, data, response.getWriter(), Boolean.FALSE);
         } catch (Exception e) {
-            log.error("ComplexExcelReportUtil exportReportByBrowser in error:", e);
+            log.error("ComplexReportUtil exportReportByBrowser in error:", e);
         }
     }
 

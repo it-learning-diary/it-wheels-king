@@ -1,7 +1,6 @@
 package cn.it.learning.util.file_system;
 
 import cn.hutool.core.util.StrUtil;
-import cn.it.learning.config.SeaweedFsConfig;
 import cn.it.learning.constant.CommonConstant;
 import cn.it.learning.util.browser.BrowserAdapterUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -11,15 +10,12 @@ import org.lokra.seaweedfs.core.FileSource;
 import org.lokra.seaweedfs.core.FileTemplate;
 import org.lokra.seaweedfs.core.file.FileHandleStatus;
 import org.lokra.seaweedfs.core.http.StreamResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
-import sun.misc.BASE64Encoder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
-import java.net.URLEncoder;
 
 /**
  * @Author it
@@ -31,9 +27,6 @@ import java.net.URLEncoder;
 @Component
 public class SeaweedFsUtil {
 
-    @Autowired
-    private SeaweedFsConfig seaweedFsConfig;
-
     /**
      * 表单形式文件传输类型
      */
@@ -44,10 +37,10 @@ public class SeaweedFsUtil {
      * @author: it
      * @date: 2022/7/14 18:37
      */
-    private FileSource getFileSource() {
+    private FileSource getFileSource(String host,Integer port) {
         FileSource fileSource = new FileSource();
-        fileSource.setHost(seaweedFsConfig.getHost());
-        fileSource.setPort(seaweedFsConfig.getPort());
+        fileSource.setHost(host);
+        fileSource.setPort(port);
         fileSource.setConnectionTimeout(1000);
         fileSource.setIdleConnectionExpiry(200);
         try {
@@ -64,8 +57,8 @@ public class SeaweedFsUtil {
      * @return: 文件的fid + 文件的请全访问地址
      * @author: it
      */
-    public String uploadFile(MultipartFile file) throws Exception {
-        FileSource fileSource = getFileSource();
+    public String uploadFile(MultipartFile file,String host,Integer port) throws Exception {
+        FileSource fileSource = getFileSource(host,port);
         FileTemplate fileTemplate = new FileTemplate(fileSource.getConnection());
         // 上传文件
         FileHandleStatus handleStatus = fileTemplate.saveFileByStream(file.getOriginalFilename(), file.getInputStream(), contentType);
@@ -80,8 +73,8 @@ public class SeaweedFsUtil {
      * @description: 根据文件ID删除文件
      * @author: it
      */
-    public void deleteFileByFid(String fileId) throws Exception {
-        FileSource fileSource = getFileSource();
+    public void deleteFileByFid(String host,Integer port,String fileId) throws Exception {
+        FileSource fileSource = getFileSource(host,port);
         FileTemplate fileTemplate = new FileTemplate(fileSource.getConnection());
         fileTemplate.deleteFile(fileId);
         fileSource.shutdown();
@@ -94,8 +87,8 @@ public class SeaweedFsUtil {
      * @param: fileName
      * @author: it
      */
-    public void downloadFileByFid(HttpServletResponse response, HttpServletRequest request, String fid, String fileName) throws Exception {
-        FileSource fileSource = getFileSource();
+    public void downloadFileByFid(HttpServletResponse response, HttpServletRequest request,String host,Integer port, String fid, String fileName) throws Exception {
+        FileSource fileSource = getFileSource(host,port);
         FileTemplate fileTemplate = new FileTemplate(fileSource.getConnection());
         StreamResponse fileStream = fileTemplate.getFileStream(fid);
         // 解决跨域问题
