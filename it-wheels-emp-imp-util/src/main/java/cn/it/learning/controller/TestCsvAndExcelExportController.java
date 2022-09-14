@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
  * @Version 1.0
  */
 @RestController
-public class UserController {
+public class TestCsvAndExcelExportController {
 
     @Autowired
     private UserServiceImpl userService;

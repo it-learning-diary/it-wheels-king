@@ -17,7 +17,7 @@ import java.util.HashMap;
  */
 @Slf4j
 @RestController
-public class ComplexTestController {
+public class TestComplexReportController {
     /**
      * @description: 复杂模板导出案例
      * @param:
