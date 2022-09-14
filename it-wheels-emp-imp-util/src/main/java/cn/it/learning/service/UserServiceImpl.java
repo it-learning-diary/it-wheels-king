@@ -250,7 +250,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> {
         //CsvImportUtil.importCsvWithBean(file.getInputStream(), errorLogList, UserCsvDto.class, UserServiceImpl::saveUserListWithCsv);
 
         // 方式二、使用csv数据映射到字符串数组的方式进行数据导入
-        CsvImportUtil.importCsvWithString(file.getInputStream(), errorLogList, UserCsvDto.class, UserServiceImpl::saveUserListWithCsvStringArrDemo);
+        CsvImportUtil.importCsvWithString(file.getInputStream(), errorLogList, UserServiceImpl::saveUserListWithCsvStringArrDemo);
 
         // 如果存在解析异常，输出解析异常并进行事务回滚
         if (CollUtil.isNotEmpty(errorLogList)) {
