@@ -1,6 +1,6 @@
 ## 项目示例在线文档
 
-<a href="http://it-learning-diary.gitee.io/it-wheels-king-inline-doc" target="_blank">轮子之王使用示例-在线文档</a>
+<a href="http://it-learning-diary.gitee.io/it-wheels-king-inline-doc" target="_blank">轮子之王使用示例-在线文档(使用必看)</a>
 
 
 ## 项目初衷
@@ -31,32 +31,33 @@
 
 - main：主分支，会定期合并最新代码
 - master：主分支，包含演示代码(学习建议拉取该分支代码)
-- release：发布分支(暂未提供)，只包含核心代码，不包含演示代码(<b>项目引入推荐使用该分支</b>)
+- release：发布分支，只包含核心代码，不包含演示代码(<b>项目引入推荐使用该分支</b>)
 
 ## 引入方式
 
 
-- <b>方式一：</b> 将项目打成jar包，在项目中引入(推荐)
+- <b>方式一：</b> 将项目打成jar包，在项目中引入(100%推荐)
 - <b>方式二：</b> 引入所需依赖，将工具包复制到自己项目的代码中
 
 ## 技术栈
 
-- spring-boot
-- easyexcel
+- spring-boot(用于提供测试样例)
+- easyexcel(大数据量下excel导入导出)
 - postgresql(可选，用于写演示案例)
 - mybatis/mybatis-plus(可选，用于写演示案例)
-- hutool
-- lombok
+- hutool(一些集成工具类)
+- lombok(自动生成get/set方法)
 - univocity-parsers(用于csv导出导出)
 - commons-net(用于ftp上传、下载)
 - seaweedfs-client(用于文件服务器上传、下载、删除操作)
-- freemarker(实现复杂报表导出)
+- freemarker(实现复杂报表excel、word导出)
 
 
 
 ## 更新日志
 
   - 2022-9-15: 集成zip压缩轮子，支持压缩指定文件和指定目录下所有文件
+  - 2022-9-10：删除部分用于字段，整理正式分支release(项目需要使用直接打包release分支依赖即可)
   - 2022-9-09: 集成复杂报表导出工具(freemarker实现，用于复杂excel、word导出)
   - 2022-9-07: 集成使用示例在线文档
   - 2022-9-06: ftp工具集成从远端下载文件到本地，引入springboot-test添加本地测试
