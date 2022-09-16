@@ -1,14 +1,15 @@
 package cn.it.learning.util.zip;
 
+import cn.hutool.core.util.StrUtil;
 import cn.it.learning.constant.CommonConstant;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
+import java.io.*;
+import java.util.Enumeration;
 import java.util.Objects;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
 /**
@@ -120,4 +121,55 @@ public class ZipUtil {
         response.setHeader(CommonConstant.CONTENT_DISPOSITION, CommonConstant.ATTACHMENT_FILENAME + fileName);
     }
 
+    /**
+     * @description: 解压指定文件到具体目录下
+     * @param:
+     * @param: saveDecompressPath 解压后的文件保存目录
+     * @param: zipFileList 需要解压的zip文件
+     * @return:
+     * @author: it-diary
+     * @date: 2022/9/16 14:47
+     */
+    public static void decompressZipFile(String saveDecompressPath, ZipFile... zipFileList) throws Exception {
+        File savePath = new File(saveDecompressPath);
+        if (!savePath.exists()) {
+            savePath.mkdirs();
+        }
+        for (ZipFile zipFile : zipFileList) {
+            Enumeration<? extends ZipEntry> entries = zipFile.entries();
+            // 遍历压缩包下的所有文件，并保存到给定的压缩地址
+            while (entries.hasMoreElements()) {
+                InputStream inputStream = null;
+                FileOutputStream fileOutputStream = null;
+                BufferedOutputStream outputStream = null;
+                try {
+                    ZipEntry zipEntry = entries.nextElement();
+                    inputStream = zipFile.getInputStream(zipEntry);
+                    // 将文件解压到指定位置
+                    fileOutputStream = new FileOutputStream(new File(saveDecompressPath + StrUtil.SLASH + zipEntry.getName()));
+                    outputStream = new BufferedOutputStream(fileOutputStream);
+                    byte[] buffer = new byte[1024];
+                    int result = 0;
+                    while ((result = inputStream.read(buffer, 0, buffer.length)) != -1) {
+                        outputStream.write(buffer, 0, result);
+                    }
+                } catch (Exception e) {
+                    throw e;
+                } finally {
+                    if (Objects.nonNull(inputStream)) {
+                        inputStream.close();
+                    }
+                    if (Objects.nonNull(outputStream)) {
+                        outputStream.flush();
+                        if (Objects.nonNull(fileOutputStream)) {
+                            fileOutputStream.close();
+                        }
+                        outputStream.close();
+                    }
+                }
+
+            }
+            zipFile.close();
+        }
+    }
 }
