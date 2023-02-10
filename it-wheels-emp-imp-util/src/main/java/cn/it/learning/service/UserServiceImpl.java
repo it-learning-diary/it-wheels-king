@@ -12,6 +12,7 @@ import cn.it.learning.util.csv.CsvImportUtil;
 import cn.it.learning.util.excel.ExcelExportUtil;
 import cn.it.learning.util.excel.ExcelImportUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +32,7 @@ import java.util.stream.Stream;
  * @Date 2022/4/25 10:00
  * @Version 1.0
  */
+@Slf4j
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> {
 
@@ -256,6 +258,32 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> {
         if (CollUtil.isNotEmpty(errorLogList)) {
             throw new RuntimeException(StrUtil.toString(errorLogList));
         }
+    }
+
+
+    /**
+     * 测试excel工具导入多参数示例
+     * @param file
+     * @param username
+     */
+    public void testMultiParamImportExcelUtilDemo(MultipartFile file,String username) throws Exception{
+        ExcelImportUtil.importBiFile(file.getInputStream(), new UserDto(),UserServiceImpl::persistenceMultiParam,new User(12,username,"password"));
+    }
+
+    /**
+     * excel多参数导入数据落库示例
+     * @param userParamList
+     * @param user
+     */
+    private static void persistenceMultiParam(List<UserDto> userParamList,User user){
+        List<User> userList = new ArrayList<>();
+        for (UserDto userDto : userParamList) {
+            User item = new User();
+            BeanUtil.copyProperties(userDto, item);
+            userList.add(item);
+        }
+        log.info("user ==>::{}",user);
+        // 数据库罗盘
     }
 
     /**
