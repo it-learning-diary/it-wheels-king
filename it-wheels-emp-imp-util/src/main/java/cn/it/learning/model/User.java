@@ -1,8 +1,7 @@
 package cn.it.learning.model;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 /**
  * @Author it-learning-diary
@@ -12,11 +11,16 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @TableName(value = "t_user_test")
 public class User {
 
     private Integer id;
     private String name;
     private String password;
+
+
 
 }
