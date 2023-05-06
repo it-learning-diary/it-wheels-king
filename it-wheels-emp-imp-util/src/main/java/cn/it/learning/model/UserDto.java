@@ -23,7 +23,7 @@ public class UserDto {
     @ImportFieldValid(message = "用户ID不能为空")
     private Integer id;
     @ExcelProperty(index = 1)
-    @ImportFieldValid(message = "用户名称不能为空")
+@ImportFieldValid(message = "用户名称不能为空")
     private String name;
     @ExcelProperty(index = 2)
     @ImportFieldValid(message = "用户密码不能为空")
