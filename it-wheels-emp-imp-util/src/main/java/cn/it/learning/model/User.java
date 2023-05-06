@@ -2,6 +2,8 @@ package cn.it.learning.model;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @Author it-learning-diary
@@ -20,7 +22,4 @@ public class User {
     private Integer id;
     private String name;
     private String password;
-
-
-
 }
