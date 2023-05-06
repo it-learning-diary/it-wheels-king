@@ -26,7 +26,6 @@
             <artifactId>spring-boot-starter-test</artifactId>
         </dependency>
 
-
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>

@@ -3,7 +3,7 @@ server:
 spring:
   application:
     name: it-wheels-king
-   #限制单次可上传最大大小
+    #限制单次可上传最大大小
   servlet:
     multipart:
       max-file-size: 500MB
